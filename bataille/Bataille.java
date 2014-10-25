@@ -1,7 +1,6 @@
 package bataille;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Bataille {
 	private ArrayList<Carte> jeu = new ArrayList<Carte>();
@@ -13,6 +12,7 @@ public class Bataille {
 		Joueur Olaf = new Joueur("Olaf");
 		Joueur Pierre = new Joueur("Pierre");
 		maBataille.creationJeu();
+		maBataille.melangerJeu(maBataille.jeu);
 		maBataille.distributionCarte(Olaf, Pierre);
 		maBataille.jouerPartie(Olaf, Pierre);
 	}
@@ -23,7 +23,6 @@ public class Bataille {
 				this.jeu.add(new Carte(couleur, valeur));
 			}
 		}
-		Collections.shuffle(this.jeu);
 	}
 
 	public void distributionCarte(Joueur joueur1, Joueur joueur2) {
@@ -67,7 +66,8 @@ public class Bataille {
 			joueur2.addPoint();
 			System.out.println(joueur2.getPrenom() + " gagne 1 point !" + "\n");
 		}
-		
+		if(carteJoueur1.getValeur() == carteJoueur2.getValeur())
+			System.out.println("Personne ne gagne de point ! \n");
 	}
 
 	private void declareVainqueur(Joueur joueur1, Joueur joueur2) {
@@ -79,5 +79,24 @@ public class Bataille {
 			System.out.println("\n" + joueur2.getPrenom()
 					+ " gagne la bataille avec " + joueur2.getPoint()
 					+ " points !!");
+	}
+
+	public void melangerJeu(ArrayList<Carte> jeu) {
+		int iteration = 0;
+		for (int i = 0; i < jeu.size(); i++) {
+
+			int indexCartePourMelange = (int) Math.abs((Math.random() * jeu.size()));
+			int indexAutreCarte = (int) Math.abs((Math.random() * jeu.size()));
+
+			if (indexCartePourMelange != indexAutreCarte) {
+				Carte cartePourMelange = jeu.get(indexCartePourMelange);
+				Carte ancienneCarte = jeu.set(indexAutreCarte, cartePourMelange);
+				jeu.set(indexCartePourMelange, ancienneCarte);
+			}
+			iteration++;
+		}
+		if (iteration < 2) {
+			melangerJeu(jeu);
+		}
 	}
 }
